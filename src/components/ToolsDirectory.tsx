@@ -1,0 +1,386 @@
+'use client';
+
+import React, { useState, useMemo } from 'react';
+import toolsData from '@/data/devsecops-tools.json';
+
+// Define types
+type ToolCategory = 
+  | 'SAST' 
+  | 'DAST' 
+  | 'SCA' 
+  | 'Secrets Management' 
+  | 'Container Security' 
+  | 'IaC Security' 
+  | 'API Security' 
+  | 'Cloud Security' 
+  | 'SBOM' 
+  | 'Policy as Code' 
+  | 'Security Observability';
+
+type ToolType = 'Open Source' | 'Commercial';
+type Platform = 'Linux' | 'Windows' | 'macOS' | 'Cross-platform' | 'Kubernetes' | 'GitHub';
+
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  category: string; // Changed to string to match JSON data
+  type: string; // Changed to string to match JSON data
+  platform: string;
+  license: string;
+  stars?: number;
+  website: string;
+  logo: string;
+}
+
+const ToolsDirectory: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // Changed to string[]
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]); // Changed to string[]
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]); // Changed to string[]
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Extract unique values for filters
+  const categories = Array.from(new Set(toolsData.map(tool => tool.category)));
+  const types = Array.from(new Set(toolsData.map(tool => tool.type)));
+  const platforms = Array.from(new Set(toolsData.map(tool => tool.platform.split(', ').map(p => p.trim())).flat()));
+
+  // Filter tools based on selections
+  const filteredTools = useMemo(() => {
+    return toolsData.filter(tool => {
+      const matchesSearch = tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           tool.category.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(tool.category);
+      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(tool.type);
+      const matchesPlatform = selectedPlatforms.length === 0 || 
+                             tool.platform.split(', ').some(platform => 
+                               selectedPlatforms.some(selectedPlatform => 
+                                 platform.trim().includes(selectedPlatform)
+                               )
+                             );
+      
+      return matchesSearch && matchesCategory && matchesType && matchesPlatform;
+    });
+  }, [searchTerm, selectedCategories, selectedTypes, selectedPlatforms]);
+
+  const toggleCategory = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter(c => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+  const toggleType = (type: string) => {
+    if (selectedTypes.includes(type)) {
+      setSelectedTypes(selectedTypes.filter(t => t !== type));
+    } else {
+      setSelectedTypes([...selectedTypes, type]);
+    }
+  };
+
+  const togglePlatform = (platform: string) => {
+    if (selectedPlatforms.includes(platform)) {
+      setSelectedPlatforms(selectedPlatforms.filter(p => p !== platform));
+    } else {
+      setSelectedPlatforms([...selectedPlatforms, platform]);
+    }
+  };
+
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setSelectedTypes([]);
+    setSelectedPlatforms([]);
+    setSearchTerm('');
+  };
+
+  // Format platform string for display
+  const formatPlatform = (platform: string): string[] => {
+    return platform.split(', ').map(p => p.trim());
+  };
+
+  return (
+    <div className="bg-gray-900 text-white p-6 rounded-lg shadow-xl">
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold mb-2">DevSecOps Tools Directory</h2>
+        <p className="text-gray-400 mb-6">Discover and explore security tools for every stage of your DevSecOps pipeline</p>
+        
+        {/* Search Bar */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search tools by name, category, or description..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        
+        {/* View Toggle */}
+        <div className="flex justify-end mb-6">
+          <div className="inline-flex rounded-md shadow-sm" role="group">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`px-4 py-2 text-sm font-medium rounded-l-lg ${
+                viewMode === 'grid'
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+              }`}
+            >
+              Grid View
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('list')}
+              className={`px-4 py-2 text-sm font-medium rounded-r-md ${
+                viewMode === 'list'
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+              }`}
+            >
+              List View
+            </button>
+          </div>
+        </div>
+        
+        {/* Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Category Filter */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Categories</h3>
+            <div className="flex flex-wrap gap-2">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  onClick={() => toggleCategory(category)}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    selectedCategories.includes(category)
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Type Filter */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Type</h3>
+            <div className="flex flex-wrap gap-2">
+              {types.map(type => (
+                <button
+                  key={type}
+                  onClick={() => toggleType(type)}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    selectedTypes.includes(type)
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Platform Filter */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Platform</h3>
+            <div className="flex flex-wrap gap-2">
+              {platforms.slice(0, 6).map(platform => (
+                <button
+                  key={platform}
+                  onClick={() => togglePlatform(platform)}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    selectedPlatforms.includes(platform)
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
+                >
+                  {platform}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Clear Filters Button */}
+        {(selectedCategories.length > 0 || selectedTypes.length > 0 || selectedPlatforms.length > 0 || searchTerm) && (
+          <div className="mb-6">
+            <button
+              onClick={clearAllFilters}
+              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600"
+            >
+              Clear All Filters
+            </button>
+          </div>
+        )}
+        
+        {/* Results Count */}
+        <div className="mb-6">
+          <p className="text-gray-400">
+            Showing <span className="font-semibold text-white">{filteredTools.length}</span> of <span className="font-semibold text-white">{toolsData.length}</span> tools
+          </p>
+        </div>
+      </div>
+      
+      {/* Tools Display */}
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredTools.map(tool => (
+            <div 
+              key={tool.id} 
+              className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-xl"
+            >
+              <div className="p-5">
+                <div className="flex items-start mb-4">
+                  <img 
+                    src={tool.logo} 
+                    alt={tool.name} 
+                    className="w-12 h-12 rounded-md object-contain bg-white p-1 mr-3"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = `https://placehold.co/48x48?text=${tool.name.charAt(0)}`;
+                    }}
+                  />
+                  <div>
+                    <h3 className="font-bold text-lg">{tool.name}</h3>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">
+                        {tool.category}
+                      </span>
+                      <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">
+                        {tool.type}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-gray-300 text-sm mb-4">{tool.description}</p>
+                
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {formatPlatform(tool.platform).map(platform => (
+                    <span 
+                      key={platform} 
+                      className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"
+                    >
+                      {platform}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center text-sm text-gray-400">
+                    {tool.stars !== undefined && tool.stars > 0 && (
+                      <>
+                        <span className="mr-1">⭐</span>
+                        <span>{tool.stars.toLocaleString()}</span>
+                      </>
+                    )}
+                  </div>
+                  
+                  <a 
+                    href={tool.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
+                  >
+                    Visit
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredTools.map(tool => (
+            <div 
+              key={tool.id} 
+              className="bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-primary transition-colors"
+            >
+              <div className="flex items-start">
+                <img 
+                  src={tool.logo} 
+                  alt={tool.name} 
+                  className="w-16 h-16 rounded-md object-contain bg-white p-1 mr-4"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = `https://placehold.co/64x64?text=${tool.name.charAt(0)}`;
+                  }}
+                />
+                
+                <div className="flex-1">
+                  <div className="flex justify-between">
+                    <div>
+                      <h3 className="font-bold text-xl">{tool.name}</h3>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <span className="px-3 py-1 bg-blue-900 text-blue-200 text-sm rounded-full">
+                          {tool.category}
+                        </span>
+                        <span className="px-3 py-1 bg-purple-900 text-purple-200 text-sm rounded-full">
+                          {tool.type}
+                        </span>
+                        <span className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded-full">
+                          {tool.license}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <a 
+                      href={tool.website} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
+                    >
+                      Visit Site
+                    </a>
+                  </div>
+                  
+                  <p className="text-gray-300 mt-3 mb-3">{tool.description}</p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {formatPlatform(tool.platform).map(platform => (
+                      <span 
+                        key={platform} 
+                        className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded"
+                      >
+                        {platform}
+                      </span>
+                    ))}
+                    {tool.stars !== undefined && tool.stars > 0 && (
+                      <span className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded flex items-center">
+                        <span className="mr-1">⭐</span> {tool.stars.toLocaleString()} stars
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {filteredTools.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-400 text-lg">No tools found matching your criteria.</p>
+          <button
+            onClick={clearAllFilters}
+            className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-indigo-700"
+          >
+            Clear All Filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ToolsDirectory;

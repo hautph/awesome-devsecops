@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://awesome-devsecops.example.com/schemas/tools.schema.json",
+  "title": "DevSecOps Tools Schema",
+  "description": "Schema for validating DevSecOps tools data",
+  "type": "object",
+  "required": ["$schema", "version", "last_updated", "tools"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the data file"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description", "category", "type", "website", "tags"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Unique identifier (lowercase, hyphens only)"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Tool name"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Brief description of the tool"
+          },
+          "category": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sast",
+                "dast",
+                "sca",
+                "secrets-management",
+                "container-security",
+                "iac-security",
+                "api-security",
+                "cloud-security",
+                "sbom",
+                "policy-as-code",
+                "security-observability"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true,
+            "description": "Tool categories"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["open-source", "commercial", "freemium"],
+            "description": "Tool type"
+          },
+          "license": {
+            "type": "string",
+            "description": "License information"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri",
+            "description": "Official website URL"
+          },
+          "github": {
+            "type": "string",
+            "format": "uri",
+            "description": "GitHub repository URL"
+          },
+          "documentation": {
+            "type": "string",
+            "format": "uri",
+            "description": "Documentation URL"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30
+            },
+            "minItems": 1,
+            "maxItems": 20,
+            "uniqueItems": true,
+            "description": "Technology tags"
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Supported platforms"
+          },
+          "stars": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "GitHub stars (for open-source tools)"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp"
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Featured tool flag"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Alternative tools"
+          }
+        }
+      }
+    }
+  }
+}

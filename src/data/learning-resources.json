@@ -1,0 +1,312 @@
+[
+  {
+    "id": "devsecops-handbook",
+    "title": "The DevSecOps Handbook",
+    "description": "A comprehensive guide to integrating security into DevOps practices.",
+    "category": "Books",
+    "difficulty": "Intermediate",
+    "cost": "Paid",
+    "link": "https://www.amazon.com/DevSecOps-Handbook-Integrating-Security/dp/1911598044",
+    "rating": 4.5
+  },
+  {
+    "id": "security-engineering",
+    "title": "Security Engineering",
+    "description": "A comprehensive book on security engineering principles and practices.",
+    "category": "Books",
+    "difficulty": "Advanced",
+    "cost": "Paid",
+    "link": "https://www.cl.cam.ac.uk/~rja14/book.html",
+    "rating": 4.3
+  },
+  {
+    "id": "owasp-top-10-ebook",
+    "title": "OWASP Top 10 Guide",
+    "description": "Essential guide to understanding and preventing the top 10 web application security risks.",
+    "category": "Books",
+    "difficulty": "Beginner",
+    "cost": "Free",
+    "link": "https://owasp.org/www-project-top-ten/",
+    "rating": 4.7
+  },
+  {
+    "id": "devsecops-professional-cert",
+    "title": "DevSecOps Professional Certification",
+    "description": "Industry certification for professionals practicing DevSecOps methodologies.",
+    "category": "Courses & Certifications",
+    "difficulty": "Intermediate",
+    "cost": "Paid",
+    "link": "https://www.devsecops.org/certification",
+    "rating": 4.2
+  },
+  {
+    "id": "csslp-cert",
+    "title": "Certified Secure Software Lifecycle Professional (CSSLP)",
+    "description": "Certification focusing on secure software development lifecycle.",
+    "category": "Courses & Certifications",
+    "difficulty": "Advanced",
+    "cost": "Paid",
+    "link": "https://www.isc2.org/Certifications/CSSLP",
+    "rating": 4.4
+  },
+  {
+    "id": "sans-dev540",
+    "title": "SANS DEV540: Securing Web Applications, Services, and Servers",
+    "description": "Hands-on course covering web application security techniques.",
+    "category": "Courses & Certifications",
+    "difficulty": "Intermediate",
+    "cost": "Paid",
+    "link": "https://www.sans.org/courses/securing-web-applications-services-servers/",
+    "rating": 4.6
+  },
+  {
+    "id": "coursera-devsecops",
+    "title": "DevSecOps Specialization (Coursera)",
+    "description": "Online specialization covering DevSecOps principles and practices.",
+    "category": "Courses & Certifications",
+    "difficulty": "Intermediate",
+    "cost": "Freemium",
+    "link": "https://www.coursera.org/specializations/devsecops",
+    "rating": 4.3
+  },
+  {
+    "id": "devsecops-talks",
+    "title": "DevSecOps Talks",
+    "description": "Collection of conference talks and presentations on DevSecOps practices.",
+    "category": "YouTube Channels & Videos",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://www.youtube.com/results?search_query=devsecops+talks",
+    "rating": 4.5
+  },
+  {
+    "id": "cybr-cmdr",
+    "title": "Cybr Commander",
+    "description": "YouTube channel with security tutorials, walkthroughs, and educational content.",
+    "category": "YouTube Channels & Videos",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://www.youtube.com/@CybrCmdr",
+    "rating": 4.6
+  },
+  {
+    "id": "liveoverflow",
+    "title": "LiveOverflow",
+    "description": "Educational channel covering binary exploitation, web security, and general security concepts.",
+    "category": "YouTube Channels & Videos",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://www.youtube.com/@LiveOverflow",
+    "rating": 4.7
+  },
+  {
+    "id": "owasp-channel",
+    "title": "OWASP Foundation",
+    "description": "Official OWASP channel with security education content.",
+    "category": "YouTube Channels & Videos",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://www.youtube.com/@OWASPFoundation",
+    "rating": 4.4
+  },
+  {
+    "id": "security-now",
+    "title": "Security Now",
+    "description": "Weekly podcast covering security news, vulnerabilities, and best practices.",
+    "category": "Podcasts",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://twit.tv/shows/security-now",
+    "rating": 4.5
+  },
+  {
+    "id": "risky-business",
+    "title": "Risky Business",
+    "description": "Long-running security podcast covering cybersecurity news and interviews.",
+    "category": "Podcasts",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://risky.biz/netcasts/risky-business/",
+    "rating": 4.3
+  },
+  {
+    "id": "darknet-diaries",
+    "title": "Darknet Diaries",
+    "description": "Podcast featuring true stories from the dark side of the Internet.",
+    "category": "Podcasts",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://darknetdiaries.com/",
+    "rating": 4.6
+  },
+  {
+    "id": "software-security-podcast",
+    "title": "Software Security Podcast",
+    "description": "Podcast focusing on software security and DevSecOps topics.",
+    "category": "Podcasts",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://software-security-podcast.simplecast.com/",
+    "rating": 4.2
+  },
+  {
+    "id": "owasp-blog",
+    "title": "OWASP Blog",
+    "description": "Official blog with articles on web application security.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://owasp.org/blog/",
+    "rating": 4.4
+  },
+  {
+    "id": "schneier-security-blog",
+    "title": "Bruce Schneier's Blog",
+    "description": "Security blog by renowned security expert Bruce Schneier.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "Advanced",
+    "cost": "Free",
+    "link": "https://www.schneier.com/blog/",
+    "rating": 4.7
+  },
+  {
+    "id": "krebsonsecurity",
+    "title": "KrebsOnSecurity",
+    "description": "Security blog by Brian Krebs covering security news and investigations.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://krebsonsecurity.com/",
+    "rating": 4.5
+  },
+  {
+    "id": "troy-hunt",
+    "title": "Troy Hunt's Blog",
+    "description": "Blog by security expert Troy Hunt on web security and breaches.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://www.troyhunt.com/",
+    "rating": 4.6
+  },
+  {
+    "id": "hackthebox",
+    "title": "Hack The Box",
+    "description": "Platform for learning penetration testing with vulnerable machines.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "All Levels",
+    "cost": "Freemium",
+    "link": "https://www.hackthebox.eu/",
+    "rating": 4.6
+  },
+  {
+    "id": "tryhackme",
+    "title": "TryHackMe",
+    "description": "Game-based learning platform for cybersecurity with guided rooms.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "Beginner",
+    "cost": "Freemium",
+    "link": "https://tryhackme.com/",
+    "rating": 4.5
+  },
+  {
+    "id": "overthewire",
+    "title": "OverTheWire",
+    "description": "Wargaming site with challenges to learn and practice security concepts.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://overthewire.org/",
+    "rating": 4.4
+  },
+  {
+    "id": "ctftime",
+    "title": "CTF Time",
+    "description": "Platform listing Capture The Flag competitions and challenges.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://ctftime.org/",
+    "rating": 4.3
+  },
+  {
+    "id": "portswigger-web-security-academy",
+    "title": "PortSwigger Web Security Academy",
+    "description": "Free practical training for web security enthusiasts.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://portswigger.net/web-security",
+    "rating": 4.7
+  },
+  {
+    "id": "practical-devsecops-course",
+    "title": "Practical DevSecOps Training",
+    "description": "Hands-on training platform focusing on practical DevSecOps skills.",
+    "category": "Courses & Certifications",
+    "difficulty": "Intermediate",
+    "cost": "Freemium",
+    "link": "https://www.practical-devsecops.com/",
+    "rating": 4.4
+  },
+  {
+    "id": "cybrary-devsecops",
+    "title": "Cybrary DevSecOps Course",
+    "description": "Free online course covering DevSecOps fundamentals.",
+    "category": "Courses & Certifications",
+    "difficulty": "Beginner",
+    "cost": "Free",
+    "link": "https://www.cybrary.it/course/devsecops/",
+    "rating": 4.2
+  },
+  {
+    "id": "red-hat-security",
+    "title": "Red Hat Security Blog",
+    "description": "Blog covering enterprise security, containers, and DevSecOps.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://www.redhat.com/en/topics/security",
+    "rating": 4.1
+  },
+  {
+    "id": "devsecops-podcast",
+    "title": "The DevSecOps Podcast",
+    "description": "Podcast dedicated to DevSecOps practices and culture.",
+    "category": "Podcasts",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://devsecops.org/podcast/",
+    "rating": 4.3
+  },
+  {
+    "id": "infoq-devsecops",
+    "title": "InfoQ DevSecOps Articles",
+    "description": "Collection of articles and talks on DevSecOps from InfoQ.",
+    "category": "Blogs & Newsletters",
+    "difficulty": "Intermediate",
+    "cost": "Free",
+    "link": "https://www.infoq.com/devsecops/",
+    "rating": 4.2
+  },
+  {
+    "id": "vulnhub",
+    "title": "VulnHub",
+    "description": "Platform providing downloadable vulnerable VMs for practice.",
+    "category": "Practice Labs & CTFs",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://www.vulnhub.com/",
+    "rating": 4.3
+  },
+  {
+    "id": "youtube-ibm-security",
+    "title": "IBM Security",
+    "description": "YouTube channel with security education and best practices content.",
+    "category": "YouTube Channels & Videos",
+    "difficulty": "All Levels",
+    "cost": "Free",
+    "link": "https://www.youtube.com/@IBMSecurity",
+    "rating": 4.1
+  }
+]

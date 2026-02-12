@@ -1,0 +1,187 @@
+{
+  "$schema": "../schemas/categories.schema.json",
+  "version": "1.0.0",
+  "last_updated": "2024-01-15T10:30:00Z",
+  "categories": [
+    {
+      "id": "sast",
+      "name": "Static Application Security Testing",
+      "slug": "sast",
+      "description": "Tools that analyze source code for security vulnerabilities without executing the program",
+      "icon": "🔍",
+      "color": "#3B82F6",
+      "order": 1,
+      "featured": true
+    },
+    {
+      "id": "dast",
+      "name": "Dynamic Application Security Testing",
+      "slug": "dast",
+      "description": "Tools that test running applications for security vulnerabilities and runtime issues",
+      "icon": "🚀",
+      "color": "#10B981",
+      "order": 2,
+      "featured": true
+    },
+    {
+      "id": "sca",
+      "name": "Software Composition Analysis",
+      "slug": "sca",
+      "description": "Tools that analyze third-party dependencies for known vulnerabilities and license compliance",
+      "icon": "📦",
+      "color": "#8B5CF6",
+      "order": 3,
+      "featured": true
+    },
+    {
+      "id": "secrets-management",
+      "name": "Secrets Management",
+      "slug": "secrets-management",
+      "description": "Tools for securely storing, managing, and rotating credentials and sensitive data",
+      "icon": "🔑",
+      "color": "#F59E0B",
+      "order": 4,
+      "featured": true
+    },
+    {
+      "id": "container-security",
+      "name": "Container Security",
+      "slug": "container-security",
+      "description": "Tools for securing container images, registries, and runtime environments",
+      "icon": "🐳",
+      "color": "#06B6D4",
+      "order": 5,
+      "featured": true
+    },
+    {
+      "id": "iac-security",
+      "name": "Infrastructure as Code Security",
+      "slug": "iac-security",
+      "description": "Tools that analyze infrastructure code for security misconfigurations and compliance issues",
+      "icon": "🏗️",
+      "color": "#EC4899",
+      "order": 6,
+      "featured": true
+    },
+    {
+      "id": "api-security",
+      "name": "API Security",
+      "slug": "api-security",
+      "description": "Tools for testing and securing APIs against common vulnerabilities and attacks",
+      "icon": "🔌",
+      "color": "#6366F1",
+      "order": 7,
+      "featured": false
+    },
+    {
+      "id": "cloud-security",
+      "name": "Cloud Security",
+      "slug": "cloud-security",
+      "description": "Tools for securing cloud infrastructure, services, and workloads across providers",
+      "icon": "☁️",
+      "color": "#0EA5E9",
+      "order": 8,
+      "featured": false
+    },
+    {
+      "id": "sbom",
+      "name": "Software Bill of Materials",
+      "slug": "sbom",
+      "description": "Tools for generating and analyzing software component inventories for supply chain security",
+      "icon": "📋",
+      "color": "#84CC16",
+      "order": 9,
+      "featured": false
+    },
+    {
+      "id": "policy-as-code",
+      "name": "Policy as Code",
+      "slug": "policy-as-code",
+      "description": "Tools for defining, enforcing, and automating security policies through code",
+      "icon": "📜",
+      "color": "#F97316",
+      "order": 10,
+      "featured": false
+    },
+    {
+      "id": "security-observability",
+      "name": "Security Observability",
+      "slug": "security-observability",
+      "description": "Tools for monitoring, detecting, and responding to security events and threats",
+      "icon": "👁️",
+      "color": "#64748B",
+      "order": 11,
+      "featured": false
+    },
+    {
+      "id": "fundamentals",
+      "name": "Fundamentals",
+      "slug": "fundamentals",
+      "description": "Core DevSecOps concepts, principles, and foundational knowledge",
+      "icon": "📚",
+      "color": "#6B7280",
+      "order": 1,
+      "featured": true
+    },
+    {
+      "id": "training",
+      "name": "Training & Education",
+      "slug": "training",
+      "description": "Educational resources, courses, and training programs for DevSecOps skills",
+      "icon": "🎓",
+      "color": "#A855F7",
+      "order": 2,
+      "featured": true
+    },
+    {
+      "id": "culture",
+      "name": "Culture & Organization",
+      "slug": "culture",
+      "description": "Resources for building security culture and organizational transformation",
+      "icon": "👥",
+      "color": "#06B6D4",
+      "order": 3,
+      "featured": false
+    },
+    {
+      "id": "threat-modeling",
+      "name": "Threat Modeling",
+      "slug": "threat-modeling",
+      "description": "Methodologies and tools for identifying and mitigating security threats",
+      "icon": "🛡️",
+      "color": "#EF4444",
+      "order": 4,
+      "featured": false
+    },
+    {
+      "id": "metrics",
+      "name": "Metrics & Measurement",
+      "slug": "metrics",
+      "description": "Frameworks and tools for measuring security effectiveness and program success",
+      "icon": "📊",
+      "color": "#10B981",
+      "order": 5,
+      "featured": false
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance & Governance",
+      "slug": "compliance",
+      "description": "Resources for regulatory compliance, audit preparation, and governance frameworks",
+      "icon": "⚖️",
+      "color": "#8B5CF6",
+      "order": 6,
+      "featured": false
+    },
+    {
+      "id": "incident-response",
+      "name": "Incident Response",
+      "slug": "incident-response",
+      "description": "Tools and procedures for detecting, responding to, and recovering from security incidents",
+      "icon": "🚨",
+      "color": "#F59E0B",
+      "order": 7,
+      "featured": false
+    }
+  ]
+}

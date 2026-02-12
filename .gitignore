@@ -1,0 +1,28 @@
+node_modules
+# Dependencies - Thư viện cài đặt (rất nặng)
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js build output - File sinh ra khi build/chạy dev
+/.next/
+.next/
+/out/
+/build
+
+# Environment variables - Cực kỳ quan trọng để bảo mật
+.env*.local
+.env
+
+# Debug & Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files & IDE settings
+.DS_Store
+.vscode/
+.idea/
+
+# TypeScript (Next.js khuyên nên ignore file này nếu nó tự sinh)
+next-env.d.ts

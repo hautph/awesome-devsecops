@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://awesome-devsecops.example.com/schemas/categories.schema.json",
+  "title": "DevSecOps Categories Schema",
+  "description": "Schema for validating DevSecOps category definitions",
+  "type": "object",
+  "required": ["$schema", "version", "last_updated", "categories"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the data file"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "slug", "description", "order"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Unique identifier (lowercase, hyphens only)"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Human-readable category name"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "URL-friendly slug for the category"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 200,
+            "description": "Brief description of the category"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Icon identifier or emoji representation"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "description": "Hex color code for UI representation"
+          },
+          "parent_category": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Parent category ID for hierarchical organization"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Display order (lower numbers appear first)"
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Whether this category should be prominently featured"
+          }
+        }
+      }
+    }
+  }
+}

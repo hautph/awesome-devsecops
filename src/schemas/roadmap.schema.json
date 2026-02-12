@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://awesome-devsecops.example.com/schemas/roadmap.schema.json",
+  "title": "DevSecOps Roadmap Schema",
+  "description": "Schema for validating DevSecOps implementation roadmap data",
+  "type": "object",
+  "required": ["$schema", "version", "last_updated", "phases", "items"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Reference to this schema file"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the data file"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of last update"
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description", "order"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Unique phase identifier"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Phase title"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Phase description"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Phase order (sequential numbering)"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description", "phase", "order", "category", "difficulty", "outcomes"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Unique item identifier"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150,
+            "description": "Item title"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 1000,
+            "description": "Detailed description of the roadmap item"
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Phase this item belongs to"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Order within the phase"
+          },
+          "category": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Category classification"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "description": "Related tool IDs"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "description": "Related resource IDs"
+          },
+          "estimated_time": {
+            "type": "string",
+            "pattern": "^[0-9]+\\s*(weeks|months|days)$",
+            "description": "Estimated implementation time"
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": ["beginner", "intermediate", "advanced"],
+            "description": "Difficulty level"
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+$"
+            },
+            "description": "Prerequisite item IDs"
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 200
+            },
+            "minItems": 1,
+            "description": "Expected outcomes/measurable results"
+          },
+          "assessment": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 300,
+            "description": "How to assess successful completion"
+          }
+        }
+      }
+    }
+  }
+}

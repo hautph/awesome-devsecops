@@ -1,0 +1,67 @@
+{
+  "$schema": "../schemas/examples.schema.json",
+  "version": "1.0.0",
+  "last_updated": "2024-01-15T10:30:00Z",
+  "examples": [
+    {
+      "id": "github-actions-sast",
+      "title": "SAST Integration with GitHub Actions",
+      "description": "GitHub Actions workflow for static application security testing using CodeQL to scan code for vulnerabilities.",
+      "category": "github-actions",
+      "language": "yaml",
+      "code": "name: CodeQL Analysis\n\non:\n  push:\n    branches: [ main, develop ]\n  pull_request:\n    branches: [ main ]\n  schedule:\n    - cron: '30 1 * * 0'\n\njobs:\n  analyze:\n    name: Analyze\n    runs-on: ubuntu-latest\n    permissions:\n      actions: read\n      contents: read\n      security-events: write\n\n    strategy:\n      fail-fast: false\n      matrix:\n        language: [ 'javascript', 'python' ]\n\n    steps:\n    - name: Checkout repository\n      uses: actions/checkout@v4\n\n    - name: Initialize CodeQL\n      uses: github/codeql-action/init@v3\n      with:\n        languages: ${{ matrix.language }}\n\n    - name: Autobuild\n      uses: github/codeql-action/autobuild@v3\n\n    - name: Perform CodeQL Analysis\n      uses: github/codeql-action/analyze@v3\n      with:\n        category: \"/language:${{matrix.language}}\"",
+      "usage": "1. Create a .github/workflows/codeql-analysis.yml file in your repository\n2. Customize the branches and languages according to your project\n3. Push to trigger the workflow automatically\n4. View results in the Security tab of your GitHub repository",
+      "tags": ["sast", "codeql", "github-actions", "security-scanning"],
+      "related_tools": ["codeql", "github-actions"],
+      "difficulty": "intermediate",
+      "last_updated": "2024-01-15T10:30:00Z",
+      "author": "DevSecOps Team",
+      "license": "MIT"
+    },
+    {
+      "id": "docker-security-config",
+      "title": "Secure Docker Configuration",
+      "description": "Dockerfile with security best practices including non-root user, multi-stage build, and security scanning.",
+      "category": "docker",
+      "language": "dockerfile",
+      "code": "# Multi-stage build for security and size optimization\nFROM node:18-alpine AS builder\n\n# Install build dependencies\nRUN apk add --no-cache python3 make g++\n\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --only=production\n\nCOPY . .\nRUN npm run build\n\n# Production stage with security hardening\nFROM node:18-alpine AS production\n\n# Create non-root user\nRUN addgroup -g 1001 -S nodejs && \\\n    adduser -S nextjs -u 1001\n\n# Install security updates and minimal packages\nRUN apk update && apk upgrade && apk add --no-cache dumb-init\n\nWORKDIR /app\n\n# Copy built application\nCOPY --from=builder /app/dist ./dist\nCOPY --from=builder /app/node_modules ./node_modules\nCOPY package.json .\n\n# Drop root privileges\nUSER nextjs\n\n# Security headers\nENV NODE_ENV=production\n\n# Health check\nHEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\\n  CMD node healthcheck.js\n\n# Use init system to handle signals properly\nENTRYPOINT [\"dumb-init\", \"--\"]\nCMD [\"node\", \"dist/server.js\"]",
+      "usage": "1. Replace the application-specific parts with your code\n2. Ensure healthcheck.js exists in your project\n3. Scan the built image with Trivy or similar tools\n4. Consider adding security scanning to your CI pipeline",
+      "tags": ["docker", "security", "multi-stage-build", "non-root-user"],
+      "related_tools": ["trivy", "docker"],
+      "difficulty": "intermediate",
+      "last_updated": "2024-01-15T10:30:00Z",
+      "author": "DevSecOps Team",
+      "license": "MIT"
+    },
+    {
+      "id": "kubernetes-network-policy",
+      "title": "Kubernetes Network Security Policy",
+      "description": "Kubernetes NetworkPolicy to restrict pod-to-pod communication and enhance cluster security.",
+      "category": "kubernetes",
+      "language": "yaml",
+      "code": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: api-security-policy\n  namespace: production\nspec:\n  podSelector:\n    matchLabels:\n      app: api-server\n  policyTypes:\n  - Ingress\n  - Egress\n  ingress:\n  # Allow traffic from frontend pods only\n  - from:\n    - podSelector:\n        matchLabels:\n          app: frontend\n    ports:\n    - protocol: TCP\n      port: 8080\n  # Allow health checks from kubelet\n  - from:\n    - namespaceSelector:\n        matchLabels:\n          name: kube-system\n    ports:\n    - protocol: TCP\n      port: 8080\n  egress:\n  # Allow DNS resolution\n  - to:\n    - namespaceSelector:\n        matchLabels:\n          name: kube-system\n    ports:\n    - protocol: UDP\n      port: 53\n    - protocol: TCP\n      port: 53\n  # Allow database connections\n  - to:\n    - podSelector:\n        matchLabels:\n          app: database\n    ports:\n    - protocol: TCP\n      port: 5432",
+      "usage": "1. Apply to your namespace with kubectl apply -f network-policy.yaml\n2. Test connectivity before applying to production\n3. Gradually tighten policies based on application requirements\n4. Monitor for blocked legitimate traffic",
+      "tags": ["kubernetes", "networkpolicy", "security", "microsegmentation"],
+      "related_tools": ["kubernetes", "kubectl"],
+      "difficulty": "advanced",
+      "last_updated": "2024-01-15T10:30:00Z",
+      "author": "DevSecOps Team",
+      "license": "MIT"
+    },
+    {
+      "id": "pre-commit-secrets-hook",
+      "title": "Pre-commit Hook for Secret Detection",
+      "description": "Pre-commit configuration to detect secrets and sensitive information before commits are made.",
+      "category": "git",
+      "language": "yaml",
+      "code": "# .pre-commit-config.yaml\nrepos:\n  - repo: https://github.com/pre-commit/pre-commit-hooks\n    rev: v4.4.0\n    hooks:\n      - id: check-added-large-files\n      - id: check-case-conflict\n      - id: check-json\n      - id: check-merge-conflict\n      - id: check-symlinks\n      - id: check-yaml\n      - id: detect-private-key\n      - id: end-of-file-fixer\n      - id: mixed-line-ending\n      - id: trailing-whitespace\n  \n  - repo: https://github.com/Yelp/detect-secrets\n    rev: v1.4.0\n    hooks:\n      - id: detect-secrets\n        args: ['--baseline', '.secrets.baseline']\n        exclude: package.lock.json\n  \n  - repo: https://github.com/zricethezav/gitleaks\n    rev: v8.16.1\n    hooks:\n      - id: gitleaks\n        args: [--verbose]\n  \n  - repo: local\n    hooks:\n      - id: custom-secret-check\n        name: Custom Secret Patterns\n        entry: ./.hooks/check-secrets.sh\n        language: script\n        types: [text]\n        exclude: >\n          (?x)^(.*/)?(\n            package-lock.json|\n            yarn.lock|\n            Gemfile.lock|\n            go.sum|\n            .secrets.baseline\n          )$",
+      "usage": "1. Install pre-commit: pip install pre-commit\n2. Create .pre-commit-config.yaml with this content\n3. Run pre-commit install to set up the hooks\n4. Run pre-commit run --all-files to scan existing files\n5. Generate baseline: detect-secrets scan > .secrets.baseline",
+      "tags": ["pre-commit", "secrets-detection", "git-hooks", "security"],
+      "related_tools": ["gitleaks", "detect-secrets"],
+      "difficulty": "beginner",
+      "last_updated": "2024-01-15T10:30:00Z",
+      "author": "DevSecOps Team",
+      "license": "MIT"
+    }
+  ]
+}
