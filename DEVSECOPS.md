@@ -1,6 +1,3 @@
-Here is a curated list of Awesome DevSecOps tools and resources in Markdown format.
-
-```markdown
 # Awesome DevSecOps [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
 A curated list of awesome tools, resources, and best practices for DevSecOps. This list focuses on integrating security practices within the DevOps process.
@@ -17,8 +14,6 @@ A curated list of awesome tools, resources, and best practices for DevSecOps. Th
 - [Runtime Application Self-Protection (RASP)](#runtime-application-self-protection-rasp)
 - [Threat Modeling](#threat-modeling)
 - [Learning Resources](#learning-resources)
-
----
 
 ## Infrastructure as Code (IaC) Security
 
@@ -107,8 +102,6 @@ Tools to identify potential threats early in the design phase.
 - [DevSecOps Hub](https://snyk.io/devsecops/) - Resources and guides provided by Snyk.
 - [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) - Configuration guidelines for various technologies (Docker, Kubernetes, AWS, etc.).
 
----
-
 ## Contributing
 
 Contributions are welcome! Please read the [contribution guidelines](https://github.com/sindresorhus/awesome/blob/main/contributing.md) first.
@@ -116,4 +109,3 @@ Contributions are welcome! Please read the [contribution guidelines](https://git
 ## License
 
 [![CC0](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/cc-zero.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
-```
