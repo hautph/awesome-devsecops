@@ -1,6 +1,6 @@
 # Awesome DevSecOps
 
-[![Awesome](https://awesome.re)](https://awesome.re)
+![Awesome](https://awesome.re)(https://awesome.re)
 ![License](https://img.shields.io/github/license/hautph/awesome-devsecops)
 ![Stars](https://img.shields.io/github/stars/hautph/awesome-devsecops)
 ![Issues](https://img.shields.io/github/issues/hautph/awesome-devsecops)
