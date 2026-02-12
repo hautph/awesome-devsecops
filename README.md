@@ -1,10 +1,18 @@
 # Awesome DevSecOps
 
+[![Awesome](https://awesome.re)](https://awesome.re)
+![License](https://img.shields.io/github/license/hautph/awesome-devsecops)
+![Stars](https://img.shields.io/github/stars/hautph/awesome-devsecops)
+![Issues](https://img.shields.io/github/issues/hautph/awesome-devsecops)
+![Link Check](https://img.shields.io/github/actions/workflow/status/hautph/awesome-devsecops/link-checker.yml?label=link-checker)
+
+> A curated list of awesome DevSecOps tools and resources.
+
 A comprehensive guide to DevSecOps practices and implementation, designed to help development teams integrate security at every stage of the software development lifecycle.
 
 ## Features
 
-- Modern Next.js 15 application with App Router
+- Modern Next.js 16 application with App Router
 - Responsive design with mobile-first approach
 - Dark theme optimized for developer experience
 - Optimized for deployment to Cloudflare Pages (static export)
@@ -57,3 +65,7 @@ This application is configured for deployment to Cloudflare Pages. The `next.con
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=hautph/awesome-devsecops&type=date&legend=top-left)](https://www.star-history.com/#hautph/awesome-devsecops&type=date&legend=top-left)
