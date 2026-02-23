@@ -35,7 +35,7 @@ const LearningResources: React.FC = () => {
 
   // Filter and sort resources
   const filteredAndSortedResources = useMemo(() => {
-    let filtered = resourcesData.filter(resource => {
+    const filtered = resourcesData.filter(resource => {
       const matchesSearch = resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            resource.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            resource.category.toLowerCase().includes(searchTerm.toLowerCase());
