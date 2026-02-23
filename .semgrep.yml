@@ -1,0 +1,96 @@
+rules:
+  # TypeScript/JavaScript Security Rules
+  - id: no-hardcoded-secrets
+    pattern-either:
+      - pattern: |
+          const $KEY = "..."
+      - pattern: |
+          password = "..."
+      - pattern: |
+          apiKey = "..."
+      - pattern: |
+          token = "..."
+    message: "Hardcoded secrets detected - use environment variables"
+    languages: [typescript, javascript]
+    severity: ERROR
+
+  - id: unsafe-json-parse
+    pattern: |
+      JSON.parse(...)
+    message: |
+      Direct JSON.parse without validation. Consider using a JSON schema validator.
+    languages: [typescript, javascript]
+    severity: WARNING
+
+  - id: no-eval
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: Function(...)
+      - pattern: setTimeout($ARG, ...) where $ARG == /.*eval.*/
+    message: "eval() detected - never use eval(). Use safer alternatives."
+    languages: [typescript, javascript]
+    severity: ERROR
+
+  - id: unsafe-innerHTML
+    pattern-either:
+      - pattern: $DOM.innerHTML = ...
+      - pattern: dangerouslySetInnerHTML={{ __html: ... }}
+    message: "XSS vulnerability: Using innerHTML/dangerouslySetInnerHTML without sanitization"
+    languages: [typescript, javascript, jsx, tsx]
+    severity: ERROR
+
+  - id: sql-injection-risk
+    patterns:
+      - pattern-either:
+          - pattern: $DB.query($STR + ...)
+          - pattern: `SELECT * FROM ... WHERE ... = ${...}`
+    message: "Potential SQL injection detected - use parameterized queries"
+    languages: [typescript, javascript]
+    severity: ERROR
+
+  - id: insecure-random
+    pattern-either:
+      - pattern: Math.random()
+    message: "Math.random() is not cryptographically secure - use crypto.getRandomValues()"
+    languages: [typescript, javascript]
+    severity: WARNING
+
+  - id: missing-input-validation
+    pattern: |
+      function $FUNC($INPUT) {
+        ...
+      }
+    message: "Function parameter not validated - ensure all inputs are sanitized"
+    languages: [typescript, javascript]
+    severity: WARNING
+
+  - id: insecure-redirect
+    patterns:
+      - pattern-either:
+          - pattern: window.location = $URL
+          - pattern: window.location.href = $URL
+          - pattern: redirect($URL)
+    message: "Unvalidated redirect - validate URLs before redirecting"
+    languages: [typescript, javascript, jsx, tsx]
+    severity: WARNING
+
+  - id: missing-authentication
+    patterns:
+      - pattern: |
+          export default function $FUNC() {
+            ...
+          }
+      - pattern-not-inside: |
+          if (authenticated) { ... }
+    message: "Unprotected route - ensure authentication is required"
+    languages: [typescript, javascript, jsx, tsx]
+    severity: WARNING
+
+  - id: weak-cryptography
+    pattern-either:
+      - pattern: crypto.createCipher(...)
+      - pattern: MD5(...)
+      - pattern: SHA1(...)
+    message: "Weak cryptographic algorithm detected - use SHA256 or stronger"
+    languages: [typescript, javascript]
+    severity: ERROR
