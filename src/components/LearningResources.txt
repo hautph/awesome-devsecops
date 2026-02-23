@@ -28,29 +28,6 @@ const LearningResources: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  // --- SECURITY FIX START ---
-  
-  /**
-   * Sanitizes a URL to prevent javascript: or data: protocol injection (XSS).
-   * Returns a safe URL or a fallback '#' if the protocol is invalid.
-   */
-  const getSafeUrl = (url: string): string => {
-    if (!url) return '#';
-    try {
-      const parsedUrl = new URL(url);
-      // Only allow http and https protocols
-      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
-        return url;
-      }
-    } catch (e) {
-      // Invalid URL format
-      return '#';
-    }
-    return '#';
-  };
-
-  // --- SECURITY FIX END ---
-
   // Extract unique values for filters
   const categories = Array.from(new Set(resourcesData.map(resource => resource.category)));
   const difficulties = Array.from(new Set(resourcesData.map(resource => resource.difficulty)));
@@ -362,7 +339,7 @@ const LearningResources: React.FC = () => {
                   </div>
                   
                   <a 
-                    href={getSafeUrl(resource.link)} 
+                    href={resource.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
@@ -404,7 +381,7 @@ const LearningResources: React.FC = () => {
                     </div>
                     
                     <a 
-                      href={getSafeUrl(resource.link)} 
+                      href={resource.link} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
