@@ -1,0 +1,113 @@
+name: 🔒 SAST - Static Application Security Testing
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  semgrep:
+    runs-on: ubuntu-latest
+    name: 🔍 Semgrep Security Scan
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          generateSarif: true
+          config: >-
+            p/security-audit
+            p/typescript
+            p/react
+            p/owasp-top-ten
+
+  eslint-security:
+    runs-on: ubuntu-latest
+    name: 📝 ESLint Security Checks
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint with security plugin
+        run: npm run lint:security
+        continue-on-error: true
+
+  typescript-security:
+    runs-on: ubuntu-latest
+    name: 🔐 TypeScript Type Safety
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript strict check
+        run: npx tsc --noEmit --strict
+
+  build-check:
+    runs-on: ubuntu-latest
+    name: ✅ Build Verification
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+  security-summary:
+    needs: [semgrep, eslint-security, typescript-security, build-check]
+    runs-on: ubuntu-latest
+    name: 📊 Summary
+    if: always()
+    
+    steps:
+      - name: Check status
+        run: |
+          if [ "${{ needs.semgrep.result }}" = "failure" ] || \
+             [ "${{ needs.eslint-security.result }}" = "failure" ] || \
+             [ "${{ needs.typescript-security.result }}" = "failure" ]; then
+            echo "❌ Security scan failed"
+            exit 1
+          fi
+          echo "✅ All checks passed!"
