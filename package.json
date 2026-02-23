@@ -7,17 +7,16 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:security": "eslint src --ext .ts,.tsx --config .eslintrc.security.json",
-    "lint:security:report": "eslint src --ext .ts,.tsx --config .eslintrc.security.json --format json --output-file eslint-report.json 2>/dev/null || true && node scripts/convert-eslint-to-sarif.js",
+    "lint:security": "eslint src --ext .ts,.tsx",
     "export": "next export",
     "validate-data": "node scripts/validate-data.js",
     "type-check": "tsc --noEmit --strict",
     "security-audit": "npm audit --audit-level=moderate"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "^16.1.5"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "16.1.6"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -27,7 +26,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "eslint": "^9",
+    "eslint": "^9.0.0",
     "eslint-config-next": "16.1.6",
     "eslint-plugin-security": "^2.1.0",
     "@typescript-eslint/parser": "^8.0.0",
