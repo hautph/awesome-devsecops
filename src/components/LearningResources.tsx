@@ -12,9 +12,9 @@ interface Resource {
   id: string;
   title: string;
   description: string;
-  category: string; // Using string to match JSON data
-  difficulty: string; // Using string to match JSON data
-  cost: string; // Using string to match JSON data
+  category: string;
+  difficulty: string;
+  cost: string;
   link: string;
   rating?: number;
 }
@@ -27,29 +27,6 @@ const LearningResources: React.FC = () => {
   const [sortBy, setSortBy] = useState<'rating' | 'title' | 'difficulty'>('rating');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  // --- SECURITY FIX START ---
-  
-  /**
-   * Sanitizes a URL to prevent javascript: or data: protocol injection (XSS).
-   * Returns a safe URL or a fallback '#' if the protocol is invalid.
-   */
-  const getSafeUrl = (url: string): string => {
-    if (!url) return '#';
-    try {
-      const parsedUrl = new URL(url);
-      // Only allow http and https protocols
-      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
-        return url;
-      }
-    } catch (e) {
-      // Invalid URL format
-      return '#';
-    }
-    return '#';
-  };
-
-  // --- SECURITY FIX END ---
 
   // Extract unique values for filters
   const categories = Array.from(new Set(resourcesData.map(resource => resource.category)));
@@ -76,7 +53,6 @@ const LearningResources: React.FC = () => {
       
       switch (sortBy) {
         case 'rating':
-          // Handle undefined ratings by treating them as 0
           const ratingA = a.rating || 0;
           const ratingB = b.rating || 0;
           comparison = ratingA > ratingB ? 1 : ratingA < ratingB ? -1 : 0;
@@ -328,96 +304,114 @@ const LearningResources: React.FC = () => {
       {/* Resources Display */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredAndSortedResources.map(resource => (
-            <div 
-              key={resource.id} 
-              className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-xl"
-            >
-              <div className="p-5">
-                <div className="flex items-start mb-4">
-                  <div className="text-2xl mr-3">{getCategoryIcon(resource.category)}</div>
-                  <div>
-                    <h3 className="font-bold text-lg">{resource.title}</h3>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      <span className={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(resource.difficulty)}`}>
-                        {resource.difficulty}
-                      </span>
-                      <span className={`px-2 py-1 text-xs rounded-full ${getCostColor(resource.cost)}`}>
-                        {resource.cost}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-gray-300 text-sm mb-4">{resource.description}</p>
-                
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center text-sm">
-                    {resource.rating !== undefined && (
-                      <div className="flex items-center">
-                        <span className="text-yellow-400 mr-1">★</span>
-                        <span className="text-gray-400">{resource.rating.toFixed(1)}</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <a 
-                    href={getSafeUrl(resource.link)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
-                  >
-                    View
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {filteredAndSortedResources.map(resource => (
-            <div 
-              key={resource.id} 
-              className="bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-primary transition-colors"
-            >
-              <div className="flex items-start">
-                <div className="text-2xl mr-4">{getCategoryIcon(resource.category)}</div>
-                
-                <div className="flex-1">
-                  <div className="flex justify-between">
+          {filteredAndSortedResources.map(resource => {
+            // SECURITY FIX: Sanitize URL immediately before use to prevent XSS
+            // We check if the link starts with http:// or https://
+            // If not, we default to '#' to block javascript: or data: injections
+            const safeLink = (resource.link && (resource.link.startsWith('http://') || resource.link.startsWith('https://'))) 
+              ? resource.link 
+              : '#';
+
+            return (
+              <div 
+                key={resource.id} 
+                className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-xl"
+              >
+                <div className="p-5">
+                  <div className="flex items-start mb-4">
+                    <div className="text-2xl mr-3">{getCategoryIcon(resource.category)}</div>
                     <div>
-                      <h3 className="font-bold text-xl">{resource.title}</h3>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <span className={`px-3 py-1 text-sm rounded-full ${getDifficultyColor(resource.difficulty)}`}>
+                      <h3 className="font-bold text-lg">{resource.title}</h3>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        <span className={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(resource.difficulty)}`}>
                           {resource.difficulty}
                         </span>
-                        <span className={`px-3 py-1 text-sm rounded-full ${getCostColor(resource.cost)}`}>
+                        <span className={`px-2 py-1 text-xs rounded-full ${getCostColor(resource.cost)}`}>
                           {resource.cost}
                         </span>
-                        {resource.rating !== undefined && (
-                          <span className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded-full flex items-center">
-                            <span className="text-yellow-400 mr-1">★</span> {resource.rating.toFixed(1)}
-                          </span>
-                        )}
                       </div>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-300 text-sm mb-4">{resource.description}</p>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center text-sm">
+                      {resource.rating !== undefined && (
+                        <div className="flex items-center">
+                          <span className="text-yellow-400 mr-1">★</span>
+                          <span className="text-gray-400">{resource.rating.toFixed(1)}</span>
+                        </div>
+                      )}
                     </div>
                     
                     <a 
-                      href={getSafeUrl(resource.link)} 
+                      href={safeLink}
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
+                      className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
                     >
-                      Visit Resource
+                      View
                     </a>
                   </div>
-                  
-                  <p className="text-gray-300 mt-3">{resource.description}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredAndSortedResources.map(resource => {
+            // SECURITY FIX: Sanitize URL immediately before use to prevent XSS
+            // We check if the link starts with http:// or https://
+            // If not, we default to '#' to block javascript: or data: injections
+            const safeLink = (resource.link && (resource.link.startsWith('http://') || resource.link.startsWith('https://'))) 
+              ? resource.link 
+              : '#';
+
+            return (
+              <div 
+                key={resource.id} 
+                className="bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-primary transition-colors"
+              >
+                <div className="flex items-start">
+                  <div className="text-2xl mr-4">{getCategoryIcon(resource.category)}</div>
+                  
+                  <div className="flex-1">
+                    <div className="flex justify-between">
+                      <div>
+                        <h3 className="font-bold text-xl">{resource.title}</h3>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          <span className={`px-3 py-1 text-sm rounded-full ${getDifficultyColor(resource.difficulty)}`}>
+                            {resource.difficulty}
+                          </span>
+                          <span className={`px-3 py-1 text-sm rounded-full ${getCostColor(resource.cost)}`}>
+                            {resource.cost}
+                          </span>
+                          {resource.rating !== undefined && (
+                            <span className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded-full flex items-center">
+                              <span className="text-yellow-400 mr-1">★</span> {resource.rating.toFixed(1)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <a 
+                        href={safeLink}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
+                      >
+                        Visit Resource
+                      </a>
+                    </div>
+                    
+                    <p className="text-gray-300 mt-3">{resource.description}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
       

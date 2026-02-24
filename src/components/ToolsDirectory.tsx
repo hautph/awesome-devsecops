@@ -24,8 +24,8 @@ interface Tool {
   id: string;
   name: string;
   description: string;
-  category: string; // Changed to string to match JSON data
-  type: string; // Changed to string to match JSON data
+  category: string;
+  type: string;
   platform: string;
   license: string;
   stars?: number;
@@ -35,55 +35,10 @@ interface Tool {
 
 const ToolsDirectory: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // Changed to string[]
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]); // Changed to string[]
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]); // Changed to string[]
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  // --- SECURITY FIX START ---
-  
-  /**
-   * Sanitizes a URL to prevent javascript: or data: protocol injection (XSS).
-   * Returns a safe URL or a fallback '#' if the protocol is invalid.
-   */
-  const getSafeUrl = (url: string): string => {
-    if (!url) return '#';
-    try {
-      const parsedUrl = new URL(url);
-      // Only allow http and https protocols
-      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
-        return url;
-      }
-    } catch (e) {
-      // Invalid URL format
-      return '#';
-    }
-    return '#';
-  };
-
-  /**
-   * Sanitizes image source URLs.
-   * Allows http, https, and relative paths starting with /.
-   */
-  const getSafeImageSrc = (src: string): string => {
-    if (!src) return '';
-    // Allow relative paths
-    if (src.startsWith('/')) return src;
-    
-    try {
-      const parsedUrl = new URL(src);
-      // Allow standard web protocols for images
-      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
-        return src;
-      }
-    } catch (e) {
-      // Invalid URL, return empty or placeholder
-      return '';
-    }
-    return '';
-  };
-
-  // --- SECURITY FIX END ---
 
   // Extract unique values for filters
   const categories = Array.from(new Set(toolsData.map(tool => tool.category)));
@@ -277,139 +232,165 @@ const ToolsDirectory: React.FC = () => {
       {/* Tools Display */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredTools.map(tool => (
-            <div 
-              key={tool.id} 
-              className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-xl"
-            >
-              <div className="p-5">
-                <div className="flex items-start mb-4">
-                  <img 
-                    src={getSafeImageSrc(tool.logo)} 
-                    alt={tool.name} 
-                    className="w-12 h-12 rounded-md object-contain bg-white p-1 mr-3"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = `https://placehold.co/48x48?text=${tool.name.charAt(0)}`;
-                    }}
-                  />
-                  <div>
-                    <h3 className="font-bold text-lg">{tool.name}</h3>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">
-                        {tool.category}
-                      </span>
-                      <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">
-                        {tool.type}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                
-                <p className="text-gray-300 text-sm mb-4">{tool.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {formatPlatform(tool.platform).map(platform => (
-                    <span 
-                      key={platform} 
-                      className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"
-                    >
-                      {platform}
-                    </span>
-                  ))}
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center text-sm text-gray-400">
-                    {tool.stars !== undefined && tool.stars > 0 && (
-                      <>
-                        <span className="mr-1">⭐</span>
-                        <span>{tool.stars.toLocaleString()}</span>
-                      </>
-                    )}
-                  </div>
-                  
-                  <a 
-                    href={getSafeUrl(tool.website)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
-                  >
-                    Visit
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {filteredTools.map(tool => (
-            <div 
-              key={tool.id} 
-              className="bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-primary transition-colors"
-            >
-              <div className="flex items-start">
-                <img 
-                  src={getSafeImageSrc(tool.logo)} 
-                  alt={tool.name} 
-                  className="w-16 h-16 rounded-md object-contain bg-white p-1 mr-4"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.onerror = null;
-                    target.src = `https://placehold.co/64x64?text=${tool.name.charAt(0)}`;
-                  }}
-                />
-                
-                <div className="flex-1">
-                  <div className="flex justify-between">
+          {filteredTools.map(tool => {
+            // SECURITY FIX: Inline validation to prevent XSS
+            // Only allow http/https protocols for links
+            const safeWebsite = (tool.website && (tool.website.startsWith('http://') || tool.website.startsWith('https://'))) 
+              ? tool.website 
+              : '#';
+            
+            // Only allow http/https protocols or relative paths for images
+            const safeLogo = (tool.logo && (tool.logo.startsWith('http://') || tool.logo.startsWith('https://') || tool.logo.startsWith('/'))) 
+              ? tool.logo 
+              : '';
+
+            return (
+              <div 
+                key={tool.id} 
+                className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-primary transition-all duration-300 hover:shadow-xl"
+              >
+                <div className="p-5">
+                  <div className="flex items-start mb-4">
+                    <img 
+                      src={safeLogo}
+                      alt={tool.name} 
+                      className="w-12 h-12 rounded-md object-contain bg-white p-1 mr-3"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = `https://placehold.co/48x48?text=${tool.name.charAt(0)}`;
+                      }}
+                    />
                     <div>
-                      <h3 className="font-bold text-xl">{tool.name}</h3>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <span className="px-3 py-1 bg-blue-900 text-blue-200 text-sm rounded-full">
+                      <h3 className="font-bold text-lg">{tool.name}</h3>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        <span className="px-2 py-1 bg-blue-900 text-blue-200 text-xs rounded-full">
                           {tool.category}
                         </span>
-                        <span className="px-3 py-1 bg-purple-900 text-purple-200 text-sm rounded-full">
+                        <span className="px-2 py-1 bg-purple-900 text-purple-200 text-xs rounded-full">
                           {tool.type}
-                        </span>
-                        <span className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded-full">
-                          {tool.license}
                         </span>
                       </div>
                     </div>
-                    
-                    <a 
-                      href={getSafeUrl(tool.website)} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
-                    >
-                      Visit Site
-                    </a>
                   </div>
                   
-                  <p className="text-gray-300 mt-3 mb-3">{tool.description}</p>
+                  <p className="text-gray-300 text-sm mb-4">{tool.description}</p>
                   
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {formatPlatform(tool.platform).map(platform => (
                       <span 
                         key={platform} 
-                        className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded"
+                        className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"
                       >
                         {platform}
                       </span>
                     ))}
-                    {tool.stars !== undefined && tool.stars > 0 && (
-                      <span className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded flex items-center">
-                        <span className="mr-1">⭐</span> {tool.stars.toLocaleString()} stars
-                      </span>
-                    )}
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center text-sm text-gray-400">
+                      {tool.stars !== undefined && tool.stars > 0 && (
+                        <>
+                          <span className="mr-1">⭐</span>
+                          <span>{tool.stars.toLocaleString()}</span>
+                        </>
+                      )}
+                    </div>
+                    
+                    <a 
+                      href={safeWebsite}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
+                    >
+                      Visit
+                    </a>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredTools.map(tool => {
+            // SECURITY FIX: Inline validation to prevent XSS
+            // Only allow http/https protocols for links
+            const safeWebsite = (tool.website && (tool.website.startsWith('http://') || tool.website.startsWith('https://'))) 
+              ? tool.website 
+              : '#';
+            
+            // Only allow http/https protocols or relative paths for images
+            const safeLogo = (tool.logo && (tool.logo.startsWith('http://') || tool.logo.startsWith('https://') || tool.logo.startsWith('/'))) 
+              ? tool.logo 
+              : '';
+
+            return (
+              <div 
+                key={tool.id} 
+                className="bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-primary transition-colors"
+              >
+                <div className="flex items-start">
+                  <img 
+                    src={safeLogo}
+                    alt={tool.name} 
+                    className="w-16 h-16 rounded-md object-contain bg-white p-1 mr-4"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.onerror = null;
+                      target.src = `https://placehold.co/64x64?text=${tool.name.charAt(0)}`;
+                    }}
+                  />
+                  
+                  <div className="flex-1">
+                    <div className="flex justify-between">
+                      <div>
+                        <h3 className="font-bold text-xl">{tool.name}</h3>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          <span className="px-3 py-1 bg-blue-900 text-blue-200 text-sm rounded-full">
+                            {tool.category}
+                          </span>
+                          <span className="px-3 py-1 bg-purple-900 text-purple-200 text-sm rounded-full">
+                            {tool.type}
+                          </span>
+                          <span className="px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded-full">
+                            {tool.license}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <a 
+                        href={safeWebsite}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
+                      >
+                        Visit Site
+                      </a>
+                    </div>
+                    
+                    <p className="text-gray-300 mt-3 mb-3">{tool.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {formatPlatform(tool.platform).map(platform => (
+                        <span 
+                          key={platform} 
+                          className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded"
+                        >
+                          {platform}
+                        </span>
+                      ))}
+                      {tool.stars !== undefined && tool.stars > 0 && (
+                        <span className="px-2 py-1 bg-gray-700 text-gray-300 text-sm rounded flex items-center">
+                          <span className="mr-1">⭐</span> {tool.stars.toLocaleString()} stars
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
       

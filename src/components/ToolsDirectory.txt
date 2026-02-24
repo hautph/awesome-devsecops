@@ -40,6 +40,51 @@ const ToolsDirectory: React.FC = () => {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]); // Changed to string[]
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
+  // --- SECURITY FIX START ---
+  
+  /**
+   * Sanitizes a URL to prevent javascript: or data: protocol injection (XSS).
+   * Returns a safe URL or a fallback '#' if the protocol is invalid.
+   */
+  const getSafeUrl = (url: string): string => {
+    if (!url) return '#';
+    try {
+      const parsedUrl = new URL(url);
+      // Only allow http and https protocols
+      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+        return url;
+      }
+    } catch (e) {
+      // Invalid URL format
+      return '#';
+    }
+    return '#';
+  };
+
+  /**
+   * Sanitizes image source URLs.
+   * Allows http, https, and relative paths starting with /.
+   */
+  const getSafeImageSrc = (src: string): string => {
+    if (!src) return '';
+    // Allow relative paths
+    if (src.startsWith('/')) return src;
+    
+    try {
+      const parsedUrl = new URL(src);
+      // Allow standard web protocols for images
+      if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+        return src;
+      }
+    } catch (e) {
+      // Invalid URL, return empty or placeholder
+      return '';
+    }
+    return '';
+  };
+
+  // --- SECURITY FIX END ---
+
   // Extract unique values for filters
   const categories = Array.from(new Set(toolsData.map(tool => tool.category)));
   const types = Array.from(new Set(toolsData.map(tool => tool.type)));
@@ -240,7 +285,7 @@ const ToolsDirectory: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-start mb-4">
                   <img 
-                    src={tool.logo} 
+                    src={getSafeImageSrc(tool.logo)} 
                     alt={tool.name} 
                     className="w-12 h-12 rounded-md object-contain bg-white p-1 mr-3"
                     onError={(e) => {
@@ -286,7 +331,7 @@ const ToolsDirectory: React.FC = () => {
                   </div>
                   
                   <a 
-                    href={tool.website} 
+                    href={getSafeUrl(tool.website)} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="px-3 py-1 bg-primary text-white text-sm rounded hover:bg-indigo-700 transition-colors"
@@ -307,7 +352,7 @@ const ToolsDirectory: React.FC = () => {
             >
               <div className="flex items-start">
                 <img 
-                  src={tool.logo} 
+                  src={getSafeImageSrc(tool.logo)} 
                   alt={tool.name} 
                   className="w-16 h-16 rounded-md object-contain bg-white p-1 mr-4"
                   onError={(e) => {
@@ -335,7 +380,7 @@ const ToolsDirectory: React.FC = () => {
                     </div>
                     
                     <a 
-                      href={tool.website} 
+                      href={getSafeUrl(tool.website)} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700 transition-colors self-start"
